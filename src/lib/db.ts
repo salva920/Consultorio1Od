@@ -9,8 +9,8 @@ if (!MONGODB_URI) {
 // Declarar el tipo global para mongoose
 declare global {
   var mongoose: {
-    conn: typeof mongoose | null;
-    promise: Promise<typeof mongoose> | null;
+    conn: any | null;
+    promise: Promise<any> | null;
   };
 }
 
