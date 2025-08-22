@@ -15,6 +15,8 @@ import {
   Badge,
   Button,
   Input,
+  InputGroup,
+  InputLeftElement,
   Select,
   Table,
   Thead,
@@ -359,14 +361,17 @@ export default function InventarioPage() {
         <Card>
           <CardBody>
             <HStack spacing={4} flexWrap="wrap">
-              <Input
-                placeholder="Buscar insumos..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                maxW="250px"
-                leftIcon={<FaSearch />}
-                bg="white"
-              />
+              <InputGroup maxW="250px">
+                <InputLeftElement pointerEvents="none">
+                  <Icon as={FaSearch} color="gray.300" />
+                </InputLeftElement>
+                <Input
+                  placeholder="Buscar insumos..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  bg="white"
+                />
+              </InputGroup>
               <Select
                 value={filterType}
                 onChange={(e) => setFilterType(e.target.value)}
