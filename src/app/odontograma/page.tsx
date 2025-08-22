@@ -3,7 +3,7 @@
 import ProtectedLayout from '../../components/layouts/ProtectedLayout'
 import Odontograma from '../../components/odontograma/Odontograma'
 import { useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import {
   Container,
   Box,
@@ -36,7 +36,7 @@ interface Patient {
   tipo_consulta: string
 }
 
-export default function OdontogramaPage() {
+function OdontogramaPageContent() {
   const searchParams = useSearchParams()
   const patientId = searchParams?.get('patientId')
   const router = useRouter()
@@ -161,5 +161,13 @@ export default function OdontogramaPage() {
     <ProtectedLayout>
       <Odontograma patientId={patientId} />
     </ProtectedLayout>
+  )
+}
+
+export default function OdontogramaPage() {
+  return (
+    <Suspense fallback={<div>Cargando...</div>}>
+      <OdontogramaPageContent />
+    </Suspense>
   )
 } 

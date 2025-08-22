@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import {
   Box,
@@ -32,7 +32,7 @@ import AppointmentList from '../../components/appointments/AppointmentList'
 import AppointmentForm from '../../components/appointments/AppointmentForm'
 import ProtectedLayout from '../../components/layouts/ProtectedLayout'
 
-export default function CitasPage() {
+function CitasPageContent() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [searchTerm, setSearchTerm] = useState('')
   const [filterStatus, setFilterStatus] = useState('all')
@@ -232,5 +232,13 @@ export default function CitasPage() {
       </VStack>
     </Container>
   </ProtectedLayout>
+  )
+}
+
+export default function CitasPage() {
+  return (
+    <Suspense fallback={<div>Cargando...</div>}>
+      <CitasPageContent />
+    </Suspense>
   )
 } 
