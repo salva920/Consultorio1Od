@@ -639,7 +639,7 @@ export default function InventarioPage() {
                 />
                 {Object.values(errors).length > 0 && (
                   <Box color="red.500" fontSize="sm">
-                    {Object.values(errors).map((err, i) => <div key={i}>{err}</div>)}
+                    {Object.values(errors).map((err: any, i: number) => <div key={i}>{err}</div>)}
                   </Box>
                 )}
               </VStack>
