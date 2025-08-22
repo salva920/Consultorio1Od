@@ -50,7 +50,13 @@ export async function GET(request: NextRequest) {
     };
 
     console.log('Estadísticas obtenidas exitosamente');
-    return NextResponse.json(stats);
+    
+    const response = NextResponse.json(stats);
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    
+    return response;
   } catch (error) {
     console.error('Error getting dashboard stats:', error);
     
