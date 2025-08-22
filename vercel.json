@@ -11,8 +11,8 @@
     }
   },
   "env": {
-    "MONGODB_URI": "@mongodb_uri",
-    "JWT_SECRET": "@jwt_secret"
+    "MONGODB_URI": "mongodb+srv://bermudezbastidass:PIzNEAiGbfOgN4Mc@cluster0.7x7lbqg.mongodb.net/odontograma?retryWrites=true&w=majority&appName=Cluster0",
+    "JWT_SECRET": "odontograma_secret_key_2024"
   },
   "rewrites": [
     {
