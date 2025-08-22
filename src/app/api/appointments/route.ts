@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
 
     const { Appointment } = await import('@/lib/models');
 
-    let query = {};
+    let query: any = {};
     
     // Filtrar por fecha si se proporciona
     if (date) {

@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
 
     const { Inventory } = await import('@/lib/models');
 
-    let query = {};
+    let query: any = {};
     
     // Búsqueda por nombre o tipo
     if (search) {

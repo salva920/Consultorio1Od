@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     
     const { Reminder } = await import('@/lib/models');
 
-    let query = {};
+    let query: any = {};
     if (status && status !== 'all') {
       query.status = status;
     }
