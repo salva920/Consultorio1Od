@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/config/database';
-import Odontograma from '@/lib/models/Odontograma';
+import { Odontograma } from '@/lib/models';
 import { promises as fs } from 'fs';
 import path from 'path';
 

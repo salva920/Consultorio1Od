@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/config/database';
-import InventoryItem from '@/lib/models/InventoryItem';
+import { InventoryItem } from '@/lib/models';
 
 export async function GET(
   request: NextRequest,

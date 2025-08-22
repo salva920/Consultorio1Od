@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import {
   Box,
   Container,
@@ -34,7 +34,8 @@ interface Patient {
 }
 
 const PatientDetails: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const router = useRouter();
+  const { id } = router.query;
   const [patient, setPatient] = useState<Patient | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -43,6 +44,8 @@ const PatientDetails: React.FC = () => {
   const borderColor = useColorModeValue('gray.200', 'gray.700');
 
   useEffect(() => {
+    if (!id) return;
+    
     const fetchPatient = async () => {
       try {
         const response = await axios.get(`/api/patients/${id}`);
@@ -125,7 +128,7 @@ const PatientDetails: React.FC = () => {
         <Box>
           <Heading size="lg" mb={6}>Odontograma</Heading>
           <Box p={6} bg={bgColor} borderRadius="lg" borderWidth="1px" borderColor={borderColor}>
-            <Odontograma patientId={id!} />
+            <Odontograma patientId={id as string} />
           </Box>
         </Box>
       </VStack>

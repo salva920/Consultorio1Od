@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/config/database';
-import Patient from '@/lib/models/Patient';
+import { Patient } from '@/lib/models';
 
 export async function GET(
   request: NextRequest,
