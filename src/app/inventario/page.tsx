@@ -255,6 +255,7 @@ export default function InventarioPage() {
         minimumStock: Number(form.minimumStock),
         cost: form.cost ? Number(form.cost) : undefined,
         expirationDate: form.expirationDate ? new Date(form.expirationDate) : undefined,
+        type: form.type as "material" | "medicamento" | "equipo" | "consumible",
       };
       handleCreateOrUpdate(data);
     }
