@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/config/database';
-import { InventoryItem } from '@/lib/models';
+import { Inventory } from '@/lib/models';
 
 export async function GET(
   request: NextRequest,
@@ -9,7 +9,7 @@ export async function GET(
   try {
     await connectDB();
     
-    const item = await InventoryItem.findById(params.id);
+    const item = await Inventory.findById(params.id);
 
     if (!item) {
       return NextResponse.json(
@@ -35,7 +35,7 @@ export async function DELETE(
   try {
     await connectDB();
     
-    const item = await InventoryItem.findByIdAndDelete(params.id);
+    const item = await Inventory.findByIdAndDelete(params.id);
 
     if (!item) {
       return NextResponse.json(
