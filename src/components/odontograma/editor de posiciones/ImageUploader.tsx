@@ -50,6 +50,9 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
   patientId,
   interventionId
 }) => {
+  // Definir la URL base de la API
+  const API_BASE_URL = 'https://consultorio2025.vercel.app'
+  
   const [isUploading, setIsUploading] = useState(false);
   const [selectedImage, setSelectedImage] = useState<InterventionImage | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -129,9 +132,6 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
 
     try {
       const response = await axios.post(
-        // Definir la URL base de la API
-        const API_BASE_URL = 'https://consultorio2025.vercel.app'
-        
         `${API_BASE_URL}/api/odontograma/${patientId}/interventions/${interventionId}/upload-images`,
         formData,
         {
