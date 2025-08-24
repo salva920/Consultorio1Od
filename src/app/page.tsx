@@ -93,11 +93,14 @@ export default function Dashboard() {
   const { isOpen: isAppointmentFormOpen, onOpen: onAppointmentFormOpen, onClose: onAppointmentFormClose } = useDisclosure()
   const { isOpen: isPatientFormOpen, onOpen: onPatientFormOpen, onClose: onPatientFormClose } = useDisclosure()
 
+  // Definir la URL base de la API
+  const API_BASE_URL = 'https://consultorio2025.vercel.app'
+
   // Obtener estadísticas del dashboard
   const { data: stats, isLoading: loadingStats } = useQuery<DashboardStats>({
     queryKey: ['dashboard-stats'],
     queryFn: async () => {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/dashboard/stats`)
+      const response = await axios.get(`${API_BASE_URL}/api/dashboard/stats`)
       return response.data
     },
     refetchInterval: 30000, // Refrescar cada 30 segundos
@@ -108,7 +111,7 @@ export default function Dashboard() {
     queryKey: ['today-appointments'],
     queryFn: async () => {
       const today = new Date().toISOString().split('T')[0]
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/appointments?date=${today}`)
+      const response = await axios.get(`${API_BASE_URL}/api/appointments?date=${today}`)
       return response.data
     },
     refetchInterval: 60000, // Refrescar cada minuto
@@ -118,7 +121,7 @@ export default function Dashboard() {
   const { data: recentPatients, isLoading: loadingRecentPatients } = useQuery<Patient[]>({
     queryKey: ['recent-patients'],
     queryFn: async () => {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/patients?limit=5&sort=-createdAt`)
+      const response = await axios.get(`${API_BASE_URL}/api/patients?limit=5&sort=-createdAt`)
       return response.data
     },
   })
@@ -127,7 +130,7 @@ export default function Dashboard() {
   const { data: upcomingAppointments, isLoading: loadingUpcomingAppointments } = useQuery<Appointment[]>({
     queryKey: ['upcoming-appointments'],
     queryFn: async () => {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/appointments?status=SCHEDULED&limit=5&sort=date`)
+      const response = await axios.get(`${API_BASE_URL}/api/appointments?status=SCHEDULED&limit=5&sort=date`)
       return response.data
     },
   })
@@ -136,7 +139,7 @@ export default function Dashboard() {
   const { data: inventoryStats, isLoading: loadingInventoryStats } = useQuery({
     queryKey: ['inventory-stats'],
     queryFn: async () => {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/inventory/stats`)
+      const response = await axios.get(`${API_BASE_URL}/api/inventory/stats`)
       return response.data
     },
     refetchInterval: 60000, // Refrescar cada minuto
@@ -146,7 +149,7 @@ export default function Dashboard() {
   const { data: lowStockItems, isLoading: loadingLowStockItems } = useQuery({
     queryKey: ['low-stock-items'],
     queryFn: async () => {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/inventory/low-stock`)
+      const response = await axios.get(`${API_BASE_URL}/api/inventory/low-stock`)
       return response.data
     },
     refetchInterval: 60000, // Refrescar cada minuto
