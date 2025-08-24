@@ -101,10 +101,15 @@ const Odontograma: React.FC<OdontogramaProps> = ({ patientId }) => {
 
   // Optimización: Memoizar dientes filtrados para evitar recálculos
   const filteredTeeth = useMemo(() => {
-    return teeth.filter(tooth => {
+    const filtered = teeth.filter(tooth => {
       const toothType = getTipoDentadura(tooth.number);
       return toothType === filterType;
     });
+    
+    console.log('🔍 Dientes filtrados para renderizado:', filtered);
+    console.log('🔍 Dientes con intervenciones:', filtered.filter(t => t.interventions.length > 0));
+    
+    return filtered;
   }, [teeth, filterType]);
 
   // Validar que patientId esté presente
@@ -130,6 +135,8 @@ const Odontograma: React.FC<OdontogramaProps> = ({ patientId }) => {
 
   // Función para determinar si un diente tiene brackets
   const hasBrackets = (tooth: Tooth): boolean => {
+    console.log(`🔍 Verificando brackets para diente ${tooth.number}:`, tooth.interventions);
+    
     const hasBrackets = tooth.interventions.some(intervention => 
       (intervention.procedure === 'Brackets' || 
        intervention.procedure === 'brackets' || 
@@ -138,12 +145,15 @@ const Odontograma: React.FC<OdontogramaProps> = ({ patientId }) => {
       intervention.status !== 'cancelado'
     );
     
+    console.log(`🔍 Diente ${tooth.number} tiene brackets:`, hasBrackets);
     return hasBrackets;
   };
 
   // Función para determinar si un diente tiene prótesis
   const hasProtesis = (tooth: Tooth): boolean => {
-    return tooth.interventions.some(intervention => 
+    console.log(`🔍 Verificando prótesis para diente ${tooth.number}:`, tooth.interventions);
+    
+    const hasProtesis = tooth.interventions.some(intervention => 
       (intervention.procedure === 'Prótesis' || 
        intervention.procedure === 'protesis' || 
        intervention.procedure === 'Prótesis' ||
@@ -155,6 +165,9 @@ const Odontograma: React.FC<OdontogramaProps> = ({ patientId }) => {
        intervention.procedure === 'Restauracion') && 
       intervention.status !== 'cancelado'
     );
+    
+    console.log(`🔍 Diente ${tooth.number} tiene prótesis:`, hasProtesis);
+    return hasProtesis;
   };
 
   // Función para determinar si un diente tiene cualquier tipo de intervención
@@ -187,7 +200,7 @@ const Odontograma: React.FC<OdontogramaProps> = ({ patientId }) => {
       // Cuadrante Superior Derecho (1-8 -> 11-18)
       1: 18, 2: 17, 3: 16, 4: 15, 5: 14, 6: 13, 7: 12, 8: 11,
       // Cuadrante Superior Izquierdo (9-16 -> 21-28)
-      9: 21, 10: 22, 11: 23, 12: 24, 13: 23, 14: 24, 15: 25, 16: 26,
+      9: 21, 10: 22, 11: 23, 12: 24, 13: 25, 14: 26, 15: 27, 16: 28,
       // Cuadrante Inferior Izquierdo (17-24 -> 31-38)
       17: 31, 18: 32, 19: 33, 20: 34, 21: 35, 22: 36, 23: 37, 24: 38,
       // Cuadrante Inferior Derecho (25-32 -> 41-48)
@@ -242,17 +255,26 @@ const Odontograma: React.FC<OdontogramaProps> = ({ patientId }) => {
             return false;
           });
           
+          console.log('🔍 Dientes del servidor filtrados:', teethFromServer);
+          console.log('🔍 Configuración de dientes frontend:', dientesConfiguracion);
+          
           const processedTeeth: Tooth[] = dientesConfiguracion.map(dienteConfig => {
             // Buscar si existe este diente en el servidor
             const serverTooth = teethFromServer.find((t: any) => {
               // Buscar por número directo primero
               if (t.number === dienteConfig.id) {
+                console.log(`✅ Diente ${dienteConfig.id} encontrado directamente en servidor`);
                 return true;
               }
               
-              // Si no se encuentra, intentar mapeo
-              const mappedNumber = mapServerToothNumber(t.number);
-              return mappedNumber === dienteConfig.id;
+              // Si no se encuentra, intentar mapeo inverso
+              const serverNumber = convertToServerToothNumber(dienteConfig.id);
+              if (t.number === serverNumber) {
+                console.log(`✅ Diente ${dienteConfig.id} encontrado por mapeo inverso (servidor: ${serverNumber})`);
+                return true;
+              }
+              
+              return false;
             });
             
             // Obtener posición por defecto
@@ -267,11 +289,13 @@ const Odontograma: React.FC<OdontogramaProps> = ({ patientId }) => {
               // Filtrar solo intervenciones activas (no canceladas)
               interventions = serverTooth.interventions.filter((int: any) => int.status !== 'cancelado');
               
+              console.log(`🔍 Diente ${dienteConfig.id} - Intervenciones encontradas:`, interventions);
+              
               // Mapear la estructura de intervenciones del servidor al formato esperado por el frontend
               interventions = interventions.map((int: any) => ({
                 id: int._id || int.id || `int_${Date.now()}_${Math.random()}`,
                 date: int.date || int.createdAt || new Date().toISOString(),
-                toothNumber: serverTooth.number,
+                toothNumber: dienteConfig.id, // Usar el número del frontend, no del servidor
                 procedure: int.procedure || int.type || 'Otros',
                 notes: int.notes || '',
                 status: int.status || 'pendiente',
@@ -298,12 +322,15 @@ const Odontograma: React.FC<OdontogramaProps> = ({ patientId }) => {
             };
           });
           
+          console.log('🔍 Dientes procesados finales:', processedTeeth);
+          
           setTeeth(processedTeeth);
           
           // Almacenar intervenciones existentes
           const allInterventions = processedTeeth.flatMap((tooth: Tooth) => tooth.interventions);
           if (allInterventions.length > 0) {
             setLoadedInterventions(allInterventions);
+            console.log('🔍 Total de intervenciones cargadas:', allInterventions.length);
           }
         } else {
           generateTeeth();
