@@ -173,10 +173,13 @@ export default function PatientForm({ isOpen, onClose, patient, onSuccess }: Pat
         motivo_consulta: data.motivo_consulta || undefined
       }
 
+      // Definir la URL base de la API
+      const API_BASE_URL = 'https://consultorio2025.vercel.app'
+
       if (patient?._id) {
-        return axios.put(`${process.env.NEXT_PUBLIC_API_URL}/patients/${patient._id}`, cleanedData)
+        return axios.put(`${API_BASE_URL}/api/patients/${patient._id}`, cleanedData)
       }
-      return axios.post(`${process.env.NEXT_PUBLIC_API_URL}/patients`, cleanedData)
+      return axios.post(`${API_BASE_URL}/api/patients`, cleanedData)
     },
     onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: ['patients'] })

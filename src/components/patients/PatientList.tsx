@@ -76,10 +76,13 @@ const PatientList = ({ searchTerm }: PatientListProps) => {
   const router = useRouter()
   const toast = useToast()
 
+  // Definir la URL base de la API
+  const API_BASE_URL = 'https://consultorio2025.vercel.app'
+
   const { data: patients, isLoading, refetch } = useQuery<Patient[]>({
     queryKey: ['patients'],
     queryFn: async () => {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/patients`)
+      const response = await axios.get(`${API_BASE_URL}/api/patients`)
       return response.data
     }
   })
@@ -101,7 +104,7 @@ const PatientList = ({ searchTerm }: PatientListProps) => {
     
     try {
       // Obtener los datos frescos del paciente desde el servidor
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/patients/${patient._id}`)
+      const response = await axios.get(`${API_BASE_URL}/api/patients/${patient._id}`)
       const freshPatientData = response.data
       
       console.log('Datos frescos del paciente obtenidos:', freshPatientData)
@@ -140,7 +143,7 @@ const PatientList = ({ searchTerm }: PatientListProps) => {
   const handleDelete = async (id: string) => {
     if (window.confirm('¿Estás seguro de que deseas eliminar este paciente?')) {
       try {
-        await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/patients/${id}`)
+        await axios.delete(`${API_BASE_URL}/api/patients/${id}`)
         refetch()
       } catch (error) {
         console.error('Error al eliminar paciente:', error)
@@ -165,7 +168,7 @@ const PatientList = ({ searchTerm }: PatientListProps) => {
       try {
         console.log('Obteniendo odontograma para paciente ID:', patient._id);
         // Usar la ruta correcta para obtener odontograma por paciente ID
-        const odontogramaResponse = await axios.get(`/api/odontograma/patient/${patient._id}`);
+        const odontogramaResponse = await axios.get(`${API_BASE_URL}/api/odontograma/patient/${patient._id}`);
         odontograma = odontogramaResponse.data;
         console.log('Odontograma obtenido:', odontograma);
       } catch (odontogramaError) {
@@ -177,7 +180,7 @@ const PatientList = ({ searchTerm }: PatientListProps) => {
       let appointments = null;
       try {
         console.log('Obteniendo citas para paciente ID:', patient._id);
-        const appointmentsResponse = await axios.get(`/api/appointments`);
+        const appointmentsResponse = await axios.get(`${API_BASE_URL}/api/appointments`);
         // Filtrar citas por paciente
         appointments = appointmentsResponse.data.filter((appointment: any) => 
           appointment.patientId === patient._id || (appointment.patient && appointment.patient._id === patient._id)

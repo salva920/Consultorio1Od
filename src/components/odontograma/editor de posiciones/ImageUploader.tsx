@@ -129,7 +129,10 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
 
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/odontograma/${patientId}/interventions/${interventionId}/upload-images`,
+        // Definir la URL base de la API
+        const API_BASE_URL = 'https://consultorio2025.vercel.app'
+        
+        `${API_BASE_URL}/api/odontograma/${patientId}/interventions/${interventionId}/upload-images`,
         formData,
         {
           headers: {

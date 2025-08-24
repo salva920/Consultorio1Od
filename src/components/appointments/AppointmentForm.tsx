@@ -94,10 +94,13 @@ export default function AppointmentForm({
   })
 
   // Obtener lista de pacientes
+  // Definir la URL base de la API
+  const API_BASE_URL = 'https://consultorio2025.vercel.app'
+
   const { data: patients, isLoading: loadingPatients } = useQuery<Patient[]>({
     queryKey: ['patients'],
     queryFn: async () => {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/patients`)
+      const response = await axios.get(`${API_BASE_URL}/api/patients`)
       return response.data
     }
   })
@@ -160,7 +163,7 @@ export default function AppointmentForm({
 
   const createAppointmentMutation = useMutation({
     mutationFn: async (data: Appointment) => {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/appointments`, data)
+      const response = await axios.post(`${API_BASE_URL}/api/appointments`, data)
       return response.data
     },
     onSuccess: () => {
@@ -192,7 +195,7 @@ export default function AppointmentForm({
 
   const updateAppointmentMutation = useMutation({
     mutationFn: async (data: Appointment) => {
-      const response = await axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/appointments/${appointment?._id}`, data)
+              const response = await axios.patch(`${API_BASE_URL}/api/appointments/${appointment?._id}`, data)
       return response.data
     },
     onSuccess: () => {

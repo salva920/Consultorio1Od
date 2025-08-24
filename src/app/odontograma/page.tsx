@@ -48,7 +48,10 @@ function OdontogramaPageContent() {
   const { data: patients, isLoading } = useQuery<Patient[]>({
     queryKey: ['patients'],
     queryFn: async () => {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/patients`)
+      // Definir la URL base de la API
+      const API_BASE_URL = 'https://consultorio2025.vercel.app'
+      
+      const response = await axios.get(`${API_BASE_URL}/api/patients`)
       return response.data
     },
     enabled: !patientId // Solo cargar si no hay patientId

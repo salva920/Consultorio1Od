@@ -95,12 +95,15 @@ export default function RecordatoriosPage() {
   const toast = useToast()
   const queryClient = useQueryClient()
 
+  // Definir la URL base de la API
+  const API_BASE_URL = 'https://consultorio2025.vercel.app'
+
   // Obtener recordatorios
   const { data: reminders, isLoading: loadingReminders } = useQuery<Reminder[]>({
     queryKey: ['reminders', selectedStatus],
     queryFn: async () => {
       const params = selectedStatus !== 'all' ? `?status=${selectedStatus}` : ''
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/reminders${params}`)
+      const response = await axios.get(`${API_BASE_URL}/api/reminders${params}`)
       return response.data
     }
   })
@@ -109,7 +112,7 @@ export default function RecordatoriosPage() {
   const { data: stats, isLoading: loadingStats } = useQuery<ReminderStats>({
     queryKey: ['reminder-stats'],
     queryFn: async () => {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/reminders/stats`)
+      const response = await axios.get(`${API_BASE_URL}/api/reminders/stats`)
       return response.data
     }
   })
@@ -118,7 +121,7 @@ export default function RecordatoriosPage() {
   const { data: serviceStatus, isLoading: loadingServiceStatus } = useQuery<ServiceStatus>({
     queryKey: ['service-status'],
     queryFn: async () => {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/reminders/status`)
+      const response = await axios.get(`${API_BASE_URL}/api/reminders/status`)
       return response.data
     },
     refetchInterval: 10000 // Refrescar cada 10 segundos
@@ -127,7 +130,7 @@ export default function RecordatoriosPage() {
   // Mutaciones
   const startServiceMutation = useMutation({
     mutationFn: async () => {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/reminders/service/start`)
+      const response = await axios.post(`${API_BASE_URL}/api/reminders/service/start`)
       return response.data
     },
     onSuccess: () => {
@@ -151,7 +154,7 @@ export default function RecordatoriosPage() {
 
   const stopServiceMutation = useMutation({
     mutationFn: async () => {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/reminders/service/stop`)
+      const response = await axios.post(`${API_BASE_URL}/api/reminders/service/stop`)
       return response.data
     },
     onSuccess: () => {
@@ -175,7 +178,7 @@ export default function RecordatoriosPage() {
 
   const processRemindersMutation = useMutation({
     mutationFn: async () => {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/reminders/service/process`)
+      const response = await axios.post(`${API_BASE_URL}/api/reminders/service/process`)
       return response.data
     },
     onSuccess: () => {
@@ -200,7 +203,7 @@ export default function RecordatoriosPage() {
 
   const resendReminderMutation = useMutation({
     mutationFn: async (reminderId: string) => {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/reminders/${reminderId}/resend`)
+      const response = await axios.post(`${API_BASE_URL}/api/reminders/${reminderId}/resend`)
       return response.data
     },
     onSuccess: () => {

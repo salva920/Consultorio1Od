@@ -75,10 +75,13 @@ const AppointmentList: React.FC<AppointmentListProps> = ({
   const borderColor = useColorModeValue('gray.200', 'gray.700')
   const router = useRouter()
 
+  // Definir la URL base de la API
+  const API_BASE_URL = 'https://consultorio2025.vercel.app'
+
   const { data: appointments, isLoading, refetch } = useQuery<Appointment[]>({
     queryKey: ['appointments'],
     queryFn: async () => {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/appointments`)
+      const response = await axios.get(`${API_BASE_URL}/api/appointments`)
       return response.data
     }
   })
@@ -155,7 +158,7 @@ const AppointmentList: React.FC<AppointmentListProps> = ({
   const handleDelete = async (id: string) => {
     if (window.confirm('¿Estás seguro de que deseas eliminar esta cita?')) {
       try {
-        await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/appointments/${id}`)
+        await axios.delete(`${API_BASE_URL}/api/appointments/${id}`)
         refetch()
       } catch (error) {
         console.error('Error al eliminar cita:', error)
@@ -165,7 +168,7 @@ const AppointmentList: React.FC<AppointmentListProps> = ({
 
   const handleStatusChange = async (id: string, newStatus: string) => {
     try {
-      await axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/appointments/${id}`, {
+              await axios.patch(`${API_BASE_URL}/api/appointments/${id}`, {
         status: newStatus
       })
       refetch()
